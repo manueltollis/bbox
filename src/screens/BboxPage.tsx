@@ -1,16 +1,19 @@
 import { Cropper, CropperRef, ImageRestriction } from "react-advanced-cropper";
 import { useGetImage } from "../api/useGetImage";
-import "react-advanced-cropper/dist/style.css";
-import "react-advanced-cropper/dist/themes/bubble.css";
-
 import { normalizeCoordinate } from "../utils/normalizeCoordinate";
-import { useRef } from "react";
-import "./BBoxPage.style.css";
+import { useRef, useState } from "react";
 import { useSubmitBoundingBox } from "../api/useSubmitBoundingBox";
 import { Button } from "../components/Button";
 import CircleLoader from "../components/CircleLoader/CircleLoader";
 import routerStore from "../store/routerStore";
 import ProgressBar from "../components/ProgressBar";
+
+import "react-advanced-cropper/dist/style.css";
+import "react-advanced-cropper/dist/themes/bubble.css";
+import "./BBoxPage.style.css";
+
+const MAX_STEPS = 3;
+const INITIAL_STEP = 1;
 
 type Coordinates = {
   x: number;
@@ -18,7 +21,11 @@ type Coordinates = {
 };
 
 const BboxPage = () => {
-  const { isLoading, data } = useGetImage();
+  const [step, setStep] = useState(INITIAL_STEP);
+
+  const progress = (step / (MAX_STEPS + 1)) * 100;
+
+  const { isLoading, data, refetch } = useGetImage();
 
   const navigateTo = routerStore((state) => state.navigateTo);
 
@@ -75,11 +82,32 @@ const BboxPage = () => {
     );
   }
 
-  const imageUrl = `/assets/${data?.fileName}`;
+  const handleSubmit = async () => {
+    try {
+      await submitBbox({
+        id: data.id,
+        boundingBox: {
+          topLeft: topLeftCoordinates.current!,
+          bottomRight: bottomRightCoordinates.current!,
+        },
+      });
+
+      if (step === MAX_STEPS) {
+        navigateTo("thanks");
+      } else {
+        setStep((prev) => prev + 1);
+        refetch();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const imageUrl = `/assets/${data.fileName}`;
 
   return (
     <div className="flex h-full flex-col gap-2">
-      <ProgressBar fill={80} />
+      <ProgressBar fill={progress} />
       <h1 className="text-center text-xl">Where is the {data?.target}?</h1>
       <div className="flex-1">
         <Cropper
@@ -89,9 +117,17 @@ const BboxPage = () => {
           transitions={false}
           imageRestriction={ImageRestriction.stencil}
           defaultSize={({ imageSize, visibleArea }) => {
+            const width =
+              (visibleArea || imageSize).width -
+              (visibleArea || imageSize).width * 0.1;
+
+            const height =
+              (visibleArea || imageSize).height -
+              (visibleArea || imageSize).height * 0.1;
+
             return {
-              width: (visibleArea || imageSize).width,
-              height: (visibleArea || imageSize).height,
+              width,
+              height,
             };
           }}
         />
@@ -109,21 +145,7 @@ const BboxPage = () => {
           disabled={isPending}
           className="flex-1"
           loading={isPending}
-          onClick={async () => {
-            try {
-              await submitBbox({
-                id: data?.id,
-                boundingBox: {
-                  topLeft: topLeftCoordinates.current!,
-                  bottomRight: bottomRightCoordinates.current!,
-                },
-              });
-
-              navigateTo("thanks");
-            } catch (error) {
-              console.error(error);
-            }
-          }}
+          onClick={handleSubmit}
         >
           Submit
         </Button>

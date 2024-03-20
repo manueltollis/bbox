@@ -1,5 +1,3 @@
-import React from "react";
-
 const ProgressBar = ({ fill }: { fill: number }) => {
   const amount = Math.min(100, Math.max(0, fill));
 

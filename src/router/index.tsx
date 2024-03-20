@@ -17,7 +17,6 @@ const RenderPage = ({ page }: { page: Page }) => {
 
 export const Router = () => {
   const page = routerStore((state) => state.page);
-  console.log(page);
   return (
     <div className="flex h-screen flex-col p-2">
       <Topbar />
