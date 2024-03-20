@@ -14,57 +14,57 @@ type GetSingleImageResponse = z.infer<typeof GetSingleImageResponse>;
 const examplesImages: GetSingleImageResponse[] = [
   {
     id: "1",
-    fileName: "image_01.png",
+    fileName: "image_01.jpg",
     target: "car",
   },
   {
     id: "2",
-    fileName: "image_02.png",
+    fileName: "image_02.jpg",
     target: "car",
   },
   {
     id: "3",
-    fileName: "image_03.png",
+    fileName: "image_03.jpg",
     target: "car",
   },
   {
     id: "4",
-    fileName: "image_04.png",
+    fileName: "image_04.jpg",
     target: "car",
   },
   {
     id: "5",
-    fileName: "image_05.png",
+    fileName: "image_05.jpg",
     target: "car",
   },
   {
     id: "6",
-    fileName: "image_06.png",
+    fileName: "image_06.jpg",
     target: "car",
   },
   {
     id: "7",
-    fileName: "image_07.png",
+    fileName: "image_07.jpg",
     target: "car",
   },
   {
     id: "8",
-    fileName: "image_08.png",
+    fileName: "image_08.jpg",
     target: "car",
   },
   {
     id: "9",
-    fileName: "image_09.png",
+    fileName: "image_09.jpg",
     target: "car",
   },
   {
     id: "10",
-    fileName: "image_10.png",
+    fileName: "image_10.jpg",
     target: "car",
   },
   {
     id: "11",
-    fileName: "image_11.png",
+    fileName: "image_11.jpg",
     target: "car",
   },
 ];
