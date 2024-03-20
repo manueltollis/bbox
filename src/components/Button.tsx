@@ -10,8 +10,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-indigo-50 active:bg-red-500  ",
-        secondary: "bg-red-500 text-indigo-50",
+        default: "bg-primary text-indigo-50 active:bg-blue-500",
+        secondary: "bg-red-600 text-indigo-50 active:bg-red-500",
       },
       size: {
         default: "h-10 px-4 py-2",

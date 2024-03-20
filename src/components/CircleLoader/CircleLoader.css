@@ -1,0 +1,13 @@
+.circle {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0; /* Mantieni il valore positivo */
+  transform: rotate(-90deg); /* Ruota il cerchio di 90 gradi in senso orario */
+  transform-origin: center; /* Imposta il punto di origine della trasformazione al centro */
+  animation: stroke 5s linear reverse forwards; /* Aggiungi "infinite" per ripetere l'animazione all'infinito e "reverse" per invertire la direzione */
+}
+
+@keyframes stroke {
+  to {
+    stroke-dashoffset: 1000;
+  }
+}
