@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type Page = "bbox" | "welcome";
+export type Page = "bbox" | "welcome" | "thanks";
 
 const routerStore = create<{
   page: Page;

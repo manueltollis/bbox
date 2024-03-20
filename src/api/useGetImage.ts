@@ -92,6 +92,7 @@ export const useGetImage = () => {
         }, DELAY);
       });
     },
-    staleTime: 0,
+    staleTime: Infinity,
+    refetchInterval: 0,
   });
 };
