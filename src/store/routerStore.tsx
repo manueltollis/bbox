@@ -1,11 +1,13 @@
 import { create } from "zustand";
 
-type Page = "bbox";
+export type Page = "bbox" | "welcome";
 
 const routerStore = create<{
   page: Page;
-}>(() => ({
-  page: "bbox",
+  navigateTo: (page: Page) => void;
+}>((set) => ({
+  page: "welcome",
+  navigateTo: (page) => set({ page }),
 }));
 
 export default routerStore;
