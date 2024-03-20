@@ -26,6 +26,13 @@ const BboxPage = () => {
   const topLeftCoordinates = useRef<Coordinates | null>();
   const bottomRightCoordinates = useRef<Coordinates | null>();
 
+  /**
+   * Fake function that would call an API to submit the absence of a target in the image
+   */
+  const noTargetHandler = async () => {
+    console.log("No target");
+  };
+
   const onCrop = (cropper: CropperRef) => {
     const coordinates = cropper.getCoordinates({
       round: true,
@@ -88,28 +95,37 @@ const BboxPage = () => {
         />
       </div>
 
-      <Button
-        disabled={isPending}
-        className="mt-4 w-full"
-        loading={isPending}
-        onClick={async () => {
-          try {
-            await submitBbox({
-              id: data?.id,
-              boundingBox: {
-                topLeft: topLeftCoordinates.current!,
-                bottomRight: bottomRightCoordinates.current!,
-              },
-            });
+      <div className="mt-4 flex flex-row items-center gap-2">
+        <Button
+          className="flex-1"
+          onClick={noTargetHandler}
+          variant="secondary"
+        >
+          No {data?.target} here
+        </Button>
+        <Button
+          disabled={isPending}
+          className="flex-1"
+          loading={isPending}
+          onClick={async () => {
+            try {
+              await submitBbox({
+                id: data?.id,
+                boundingBox: {
+                  topLeft: topLeftCoordinates.current!,
+                  bottomRight: bottomRightCoordinates.current!,
+                },
+              });
 
-            navigateTo("thanks");
-          } catch (error) {
-            console.error(error);
-          }
-        }}
-      >
-        Submit
-      </Button>
+              navigateTo("thanks");
+            } catch (error) {
+              console.error(error);
+            }
+          }}
+        >
+          Submit
+        </Button>
+      </div>
     </div>
   );
 };
