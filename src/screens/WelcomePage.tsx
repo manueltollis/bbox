@@ -2,9 +2,22 @@ import rapidataLogo from "../assets/logo_with_name.svg";
 import { Button } from "../components/Button";
 import routerStore from "../store/routerStore";
 import CircleLoader from "../components/CircleLoader/CircleLoader";
+import { useEffect } from "react";
+
+const SECONDS_TO_WAIT = 5_000;
 
 const WelcomePage = () => {
   const { navigateTo } = routerStore();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      navigateTo("bbox");
+    }, SECONDS_TO_WAIT);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [navigateTo]);
 
   return (
     <div className="flex h-full flex-1 flex-col items-center justify-center gap-4">
@@ -17,6 +30,8 @@ const WelcomePage = () => {
         <p className="text-center">
           The faster you are and the faster you will close this ad!
         </p>
+
+        <CircleLoader />
       </div>
 
       <Button onClick={() => navigateTo("bbox")} className="w-full">
