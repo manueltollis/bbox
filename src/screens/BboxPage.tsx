@@ -6,6 +6,8 @@ import "react-advanced-cropper/dist/themes/bubble.css";
 import { normalizeCoordinate } from "../utils/normalizeCoordinate";
 import { useRef } from "react";
 import "./BBoxPage.style.css";
+import { useSubmitBoundingBox } from "../api/useSubmitBoundingBox";
+import { Button } from "../components/Button";
 
 type Coordinates = {
   x: number;
@@ -14,6 +16,8 @@ type Coordinates = {
 
 const BboxPage = () => {
   const { isLoading, data } = useGetImage();
+
+  const { mutate: submitBbox, isPending } = useSubmitBoundingBox();
 
   const topLeftCoordinates = useRef<Coordinates | null>();
   const bottomRightCoordinates = useRef<Coordinates | null>();
@@ -51,34 +55,51 @@ const BboxPage = () => {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return (
       <div className="flex h-full w-full items-center justify-center">
         <div className="border-primary h-32 w-32 animate-spin rounded-full border-b-2"></div>
       </div>
     );
   }
+
   const imageUrl = `/assets/${data?.fileName}`;
 
   return (
-    <div>
+    <div className="flex h-full flex-col gap-2">
       <h1 className="text-center text-xl">Where is the {data?.target}?</h1>
+      <div className="flex-1">
+        <Cropper
+          onChange={onCrop}
+          src={imageUrl}
+          className={"cropper w-full rounded-md"}
+          transitions={false}
+          imageRestriction={ImageRestriction.stencil}
+          defaultSize={({ imageSize, visibleArea }) => {
+            return {
+              width: (visibleArea || imageSize).width,
+              height: (visibleArea || imageSize).height,
+            };
+          }}
+        />
+      </div>
 
-      <Cropper
-        onChange={onCrop}
-        src={imageUrl}
-        stencilProps={{
-          color: "rgba(100, 0, 0, 0.5)",
-        }}
-        className={"cropper text-primary w-full rounded-md"}
-        imageRestriction={ImageRestriction.stencil}
-        defaultSize={({ imageSize, visibleArea }) => {
-          return {
-            width: (visibleArea || imageSize).width,
-            height: (visibleArea || imageSize).height,
-          };
-        }}
-      />
+      <Button
+        disabled={isPending}
+        className="mt-4 w-full"
+        loading={isPending}
+        onClick={() =>
+          submitBbox({
+            id: data?.id,
+            boundingBox: {
+              topLeft: topLeftCoordinates.current!,
+              bottomRight: bottomRightCoordinates.current!,
+            },
+          })
+        }
+      >
+        Submit
+      </Button>
     </div>
   );
 };
