@@ -9,6 +9,7 @@ import "./BBoxPage.style.css";
 import { useSubmitBoundingBox } from "../api/useSubmitBoundingBox";
 import { Button } from "../components/Button";
 import CircleLoader from "../components/CircleLoader/CircleLoader";
+import routerStore from "../store/routerStore";
 
 type Coordinates = {
   x: number;
@@ -18,7 +19,9 @@ type Coordinates = {
 const BboxPage = () => {
   const { isLoading, data } = useGetImage();
 
-  const { mutate: submitBbox, isPending } = useSubmitBoundingBox();
+  const navigateTo = routerStore((state) => state.navigateTo);
+
+  const { mutateAsync: submitBbox, isPending } = useSubmitBoundingBox();
 
   const topLeftCoordinates = useRef<Coordinates | null>();
   const bottomRightCoordinates = useRef<Coordinates | null>();
@@ -89,15 +92,21 @@ const BboxPage = () => {
         disabled={isPending}
         className="mt-4 w-full"
         loading={isPending}
-        onClick={() =>
-          submitBbox({
-            id: data?.id,
-            boundingBox: {
-              topLeft: topLeftCoordinates.current!,
-              bottomRight: bottomRightCoordinates.current!,
-            },
-          })
-        }
+        onClick={async () => {
+          try {
+            await submitBbox({
+              id: data?.id,
+              boundingBox: {
+                topLeft: topLeftCoordinates.current!,
+                bottomRight: bottomRightCoordinates.current!,
+              },
+            });
+
+            navigateTo("thanks");
+          } catch (error) {
+            console.error(error);
+          }
+        }}
       >
         Submit
       </Button>
