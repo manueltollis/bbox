@@ -10,6 +10,7 @@ import { useSubmitBoundingBox } from "../api/useSubmitBoundingBox";
 import { Button } from "../components/Button";
 import CircleLoader from "../components/CircleLoader/CircleLoader";
 import routerStore from "../store/routerStore";
+import ProgressBar from "../components/ProgressBar";
 
 type Coordinates = {
   x: number;
@@ -78,6 +79,7 @@ const BboxPage = () => {
 
   return (
     <div className="flex h-full flex-col gap-2">
+      <ProgressBar fill={80} />
       <h1 className="text-center text-xl">Where is the {data?.target}?</h1>
       <div className="flex-1">
         <Cropper
