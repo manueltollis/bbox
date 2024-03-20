@@ -8,6 +8,7 @@ import { useRef } from "react";
 import "./BBoxPage.style.css";
 import { useSubmitBoundingBox } from "../api/useSubmitBoundingBox";
 import { Button } from "../components/Button";
+import CircleLoader from "../components/CircleLoader/CircleLoader";
 
 type Coordinates = {
   x: number;
@@ -58,7 +59,7 @@ const BboxPage = () => {
   if (isLoading || !data) {
     return (
       <div className="flex h-full w-full items-center justify-center">
-        <div className="border-primary h-32 w-32 animate-spin rounded-full border-b-2"></div>
+        <CircleLoader />
       </div>
     );
   }
