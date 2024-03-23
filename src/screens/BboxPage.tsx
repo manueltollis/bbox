@@ -108,47 +108,51 @@ const BboxPage = () => {
   return (
     <div className="flex h-full flex-col gap-2">
       <ProgressBar fill={progress} />
-      <h1 className="text-center text-xl">Where is the {data?.target}?</h1>
-      <div className="flex-1">
-        <Cropper
-          onChange={onCrop}
-          src={imageUrl}
-          className={"cropper w-full rounded-md"}
-          transitions={false}
-          imageRestriction={ImageRestriction.stencil}
-          defaultSize={({ imageSize, visibleArea }) => {
-            const width =
-              (visibleArea || imageSize).width -
-              (visibleArea || imageSize).width * 0.1;
+      <div className="flex flex-1 flex-col">
+        <h1 className="text-center text-xl">Where is the {data?.target}?</h1>
+        <div className="flex-1">
+          <Cropper
+            onChange={onCrop}
+            src={imageUrl}
+            className={
+              "cropper w-full rounded-md landscape:mx-auto landscape:w-1/2"
+            }
+            transitions={false}
+            imageRestriction={ImageRestriction.stencil}
+            defaultSize={({ imageSize, visibleArea }) => {
+              const width =
+                (visibleArea || imageSize).width -
+                (visibleArea || imageSize).width * 0.1;
 
-            const height =
-              (visibleArea || imageSize).height -
-              (visibleArea || imageSize).height * 0.1;
+              const height =
+                (visibleArea || imageSize).height -
+                (visibleArea || imageSize).height * 0.1;
 
-            return {
-              width,
-              height,
-            };
-          }}
-        />
-      </div>
+              return {
+                width,
+                height,
+              };
+            }}
+          />
+        </div>
 
-      <div className="mt-4 flex flex-row items-center gap-2">
-        <Button
-          className="flex-1"
-          onClick={noTargetHandler}
-          variant="secondary"
-        >
-          No {data?.target} here
-        </Button>
-        <Button
-          disabled={isPending}
-          className="flex-1"
-          loading={isPending}
-          onClick={handleSubmit}
-        >
-          Submit
-        </Button>
+        <div className="mt-4 flex flex-row items-center gap-2">
+          <Button
+            className="flex-1"
+            onClick={noTargetHandler}
+            variant="secondary"
+          >
+            No {data?.target} here
+          </Button>
+          <Button
+            disabled={isPending}
+            className="flex-1"
+            loading={isPending}
+            onClick={handleSubmit}
+          >
+            Submit
+          </Button>
+        </div>
       </div>
     </div>
   );
